@@ -1,7 +1,7 @@
 
 const axios = require('axios');
 const express = require('express');
-const weathers = require('./constant');
+// const weathers = require('./constant');
 const app = express();
 
 app.use(express.json());
@@ -68,8 +68,17 @@ const webhook = async (req, res) => {
                 console.log('No forecast data available for the specified date range');
                 return res.status(404).send('No forecast data available for the specified date range');
             }
-console.log(result , "result" ,weathers);
-            res.send(result);
+console.log(result , "result" );
+
+let formattedResult = `Weather forecast for ${city}:\n`;
+result.forEach(day => {
+    formattedResult += `Date: ${day.date}, Temperature: ${day.temperature.toFixed(2)}°C\n`;
+});
+
+console.log(formattedResult, "result");
+// res.json({ forecast: {formattedResult} });
+
+            res.send({forecast:formattedResult});
         }
     } catch (error) {
         console.error('Error in webhook:', error);
